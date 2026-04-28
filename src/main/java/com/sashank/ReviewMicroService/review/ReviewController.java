@@ -15,8 +15,20 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createReview(@RequestParam Long companyId, @RequestBody Review review){
-        boolean created = reviewService.createReview(companyId, review);
+    public ResponseEntity<String> createReview(@RequestParam(required = false) Long companyId, @RequestBody Review review){
+        // Allow companyId to be provided either as query param or inside the request body (companyId field)
+        Long finalCompanyId = companyId != null ? companyId : review.getCompanyId();
+        if(finalCompanyId == null){
+            return new ResponseEntity<>("companyId is required either as query parameter or inside the request body", HttpStatus.BAD_REQUEST);
+        }
+
+        // basic validation for rating
+        int rating = review.getRating();
+        if(rating < 1 || rating > 5){
+            return new ResponseEntity<>("rating must be an integer between 1 and 5", HttpStatus.BAD_REQUEST);
+        }
+
+        boolean created = reviewService.createReview(finalCompanyId, review);
         if(created){
             return new ResponseEntity<>("Review Added Successfully", HttpStatus.OK);
         }
@@ -26,6 +38,12 @@ public class ReviewController {
     @GetMapping
     public ResponseEntity<List<Review>> getReviewsByCompany(@RequestParam Long companyId){
         List<Review> reviews = reviewService.getReviewsByCompanyId(companyId);
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Review>> getAllReviews(){
+        List<Review> reviews = reviewService.getAllReviews();
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 

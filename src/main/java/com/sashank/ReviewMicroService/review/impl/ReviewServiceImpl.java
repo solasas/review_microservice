@@ -16,7 +16,6 @@ public class ReviewServiceImpl implements ReviewService {
         this.reviewRepository = reviewRepository;
     }
 
-    @Override
     public boolean createReview(Long companyId, Review review) {
         if(companyId != null){
             review.setCompanyId(companyId);
@@ -25,6 +24,11 @@ public class ReviewServiceImpl implements ReviewService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public boolean createReview(Review review) {
+        return createReview(review.getCompanyId(), review);
     }
 
     @Override
@@ -61,5 +65,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public List<Review> getReviewsByCompanyId(Long companyId) {
         return reviewRepository.findByCompanyId(companyId);
+    }
+
+    @Override
+    public List<Review> getAllReviews() {
+        return reviewRepository.findAll();
     }
 }
