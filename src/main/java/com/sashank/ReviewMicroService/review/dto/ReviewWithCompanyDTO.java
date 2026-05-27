@@ -1,28 +1,21 @@
-package com.sashank.ReviewMicroService.review;
+package com.sashank.ReviewMicroService.review.dto;
 
-import jakarta.persistence.*;
+import com.sashank.ReviewMicroService.review.Review;
+import com.sashank.ReviewMicroService.review.external.Company;
 
-@Entity
-@Table(name="review")
-public class Review {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ReviewWithCompanyDTO {
     private Long id;
     private String title;
     private String description;
     private int rating;
     private Long companyId;
+    private Company company;
 
-    public Review(Long id, String title, String description, int rating) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.rating = rating;
-    }
-    
-    public Review(){
+    // Default constructor
+    public ReviewWithCompanyDTO() {
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -62,4 +55,13 @@ public class Review {
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
 }
+

@@ -1,5 +1,6 @@
 package com.sashank.ReviewMicroService.review;
 
+import com.sashank.ReviewMicroService.review.dto.ReviewWithCompanyDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,20 +37,20 @@ public class ReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Review>> getReviewsByCompany(@RequestParam Long companyId){
-        List<Review> reviews = reviewService.getReviewsByCompanyId(companyId);
+    public ResponseEntity<List<ReviewWithCompanyDTO>> getReviewsByCompany(@RequestParam Long companyId){
+        List<ReviewWithCompanyDTO> reviews = reviewService.getReviewsByCompanyId(companyId);
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Review>> getAllReviews(){
-        List<Review> reviews = reviewService.getAllReviews();
+    public ResponseEntity<List<ReviewWithCompanyDTO>> getAllReviews(){
+        List<ReviewWithCompanyDTO> reviews = reviewService.getAllReviews();
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Review> getReviewById(@PathVariable Long id){
-        Review review = reviewService.getReviewById(id);
+    public ResponseEntity<ReviewWithCompanyDTO> getReviewById(@PathVariable Long id){
+        ReviewWithCompanyDTO review = reviewService.getReviewById(id);
         if(review != null){
             return new ResponseEntity<>(review, HttpStatus.OK);
         } else {
