@@ -1,0 +1,40 @@
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: review_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: saso@2005
+      POSTGRES_DB: reviewdb
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - review-network
+
+  review-microservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: review-microservice
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/reviewdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: saso@2005
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8083:8083"
+    depends_on:
+      - postgres
+    networks:
+      - review-network
+
+volumes:
+  postgres_data:
+
+networks:
+  review-network:
+    driver: bridge
+
